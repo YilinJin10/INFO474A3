@@ -155,7 +155,7 @@ $('#buttonLipid').click(function() {
       .x(x)
       .y(y)
       .scaleExtent([0, 500])
-      // .on("zoom", zoom);
+      .on("zoom", zoom);
 
   var svg = d3.select("#scatter")
     .append("svg")
