@@ -4,6 +4,9 @@ var margin = { top: 50, right: 300, bottom: 50, left: 50 },
     width = outerWidth - margin.left - margin.right,
     height = outerHeight - margin.top - margin.bottom;
 
+var attributes = ["Lipid_Tot"];
+var ranges = [0, 100];
+
 var x = d3.scale.linear()
     .range([0, width]).nice();
 
@@ -17,18 +20,6 @@ var xCat = "Fiber_TD",
 
 d3.csv("nutrition.csv", function(data) {
   data.forEach(function(d) {
-    // d.Calories = +d.Calories;
-    // d.Carbs = +d.Carbs;
-    // d["Cups per Serving"] = +d["Cups per Serving"];
-    // d["Dietary Fiber"] = +d["Dietary Fiber"];
-    // d["Display Shelf"] = +d["Display Shelf"];
-    // d.Fat = +d.Fat;
-    // d.Potassium = +d.Potassium;
-    // d["Protein (g)"] = +d["Protein (g)"];
-    // d["Serving Size Weight"] = +d["Serving Size Weight"];
-    // d.Sodium = +d.Sodium;
-    // d.Sugars = +d.Sugars;
-    // d["Vitamins and Minerals"] = +d["Vitamins and Minerals"];
     d.Protein = +d.Protein;
     d.Fiber_TD = +d.Fiber_TD;
     d.Lipid_Tot = +d.Lipid_Tot;
@@ -55,7 +46,6 @@ d3.csv("nutrition.csv", function(data) {
       .tickSize(-width);
 
   // var color = d3.scale.category10();
-
   var tip = d3.tip()
       .attr("class", "d3-tip")
       .offset([-10, 0])
@@ -105,6 +95,8 @@ d3.csv("nutrition.csv", function(data) {
       .style("text-anchor", "end")
       .text(yCat);
 
+drawVis(data);
+
   var objects = svg.append("svg")
       .classed("objects", true)
       .attr("width", width)
@@ -136,21 +128,39 @@ d3.csv("nutrition.csv", function(data) {
       .on("mouseover", tip.show)
       .on("mouseout", tip.hide);
 
-  // var legend = svg.selectAll(".legend")
-  //     .data(color.domain())
-  //   .enter().append("g")
-  //     .classed("legend", true)
-  //     .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
 
-  // legend.append("circle")
-  //     .attr("r", 3.5)
-  //     .attr("cx", width + 20)
-  //     .attr("fill", color);
+function drawVis(data){
+  var objects = svg.append("svg")
+      .classed("objects", true)
+      .attr("width", width)
+      .attr("height", height);
 
-  // legend.append("text")
-  //     .attr("x", width + 26)
-  //     .attr("dy", ".35em")
-  //     .text(function(d) { return d; });
+  objects.append("svg:line")
+      .classed("axisLine hAxisLine", true)
+      .attr("x1", 0)
+      .attr("y1", 0)
+      .attr("x2", width)
+      .attr("y2", 0)
+      .attr("transform", "translate(0," + height + ")");
+
+  objects.append("svg:line")
+      .classed("axisLine vAxisLine", true)
+      .attr("x1", 0)
+      .attr("y1", 0)
+      .attr("x2", 0)
+      .attr("y2", height);
+
+  objects.selectAll(".dot")
+      .data(data)
+    .enter().append("circle")
+      .classed("dot", true)
+      .attr("r", function (d) { return 6 * Math.sqrt(d[rCat] / Math.PI); })
+      .attr("transform", transform)
+      .style("fill", "#4682b4")
+      .style("opacity", "0.5")
+      .on("mouseover", tip.show)
+      .on("mouseout", tip.hide);
+}
 
   d3.select("input").on("click", change);
 
@@ -168,17 +178,73 @@ d3.csv("nutrition.csv", function(data) {
     objects.selectAll(".dot").transition().duration(1000).attr("transform", transform);
   }
 
-  function zoom() {
-    svg.select(".x.axis").call(xAxis);
-    svg.select(".y.axis").call(yAxis);
+function zoom() {
+  svg.select(".x.axis").call(xAxis);
+  svg.select(".y.axis").call(yAxis);
 
-    svg.selectAll(".dot")
-        .attr("transform", transform);
-  }
+  svg.selectAll(".dot")
+      .attr("transform", transform);
+}
 
-  function transform(d) {
-    return "translate(" + x(d[xCat]) + "," + y(d[yCat]) + ")";
-  }
+function transform(d) {
+  return "translate(" + x(d[xCat]) + "," + y(d[yCat]) + ")";
+}
+
+// slider for lipid
+// $(function() {
+//       $( "#range2" ).slider({
+//       range: true,
+//       min: 0,
+//       max: 500,
+//       values: [ 0, 500], slide: function( event, ui ) {
+//       $( "#LipidRange" ).val( ui.values[ 0 ] + " - " + ui.values[ 1 ] );
+//       filterRange(ui.values); } });
+//       $( "#LipidRange" ).val( $( "#range2" ).slider( "values", 0 ) +
+//       " - " + $( "#range2" ).slider( "values", 1 ) ); });
+
+// function filterRange(values){
+//   var toVisualize = data.filter(function(d) {
+//     return d["range2"] >= values[0] && d["range2"] < values[1]
+
+//   });
+//   drawVis(toVisualize);
+// }
+
+function filter(attr, values) {
+    //  set range of changed attribute to the new values from the slider
+    for (i = 0; i < attributes.length; i++) {
+        if(attr === attributes[i]) {
+            ranges[i] = values;
+        }
+    }
+    var toVisualize = data.filter(function(d) {return isInRange(d)});
+    drawVis(toVisualize);
+}
+
+// Fiber slider
+$(function() {
+    $("#range2").slider({
+        range: true,
+        min: 0,
+        max: 100,
+        values: [0, 100],
+        slide: function(event, ui) {
+            $("#LipidRange").val(ui.values[0] + " - " + ui.values[1]);
+            filter("Lipid_Tot", ui.values);
+        }
+    });
+    $("#LipidRange").val($("#range2").slider("values",0) + " - " + $("#range2").slider("values",1));
+});
+
+function isInRange(datum) {
+    for (i = 0; i < attributes.length; i++) {
+        if (datum[attributes[i]] < ranges[i][0] || datum[attributes[i]] > ranges[i][1]) {
+            return false;
+        }
+    }
+    return true;
+}
+
 
 
 
