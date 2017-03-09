@@ -2,54 +2,46 @@
   <head>
     <meta charset="utf-8">
     <title>A3Part1_YilinJin</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
     <link rel="stylesheet" href="jquery-ui copy.css" charset="utf-8">
-        <link rel="stylesheet" href="style.css" charset="utf-8">
+    <link rel="stylesheet" href="style.css" charset="utf-8">
   </head>
+  
   <body>
-    <h1>Relationship of Fiber, Protein and Lipid Content of Foods</h1>
+    <div class='row'>
+      <div class='col-lg-6' style="margin-left:8px">
+        <h1>Relationship of Fiber, Protein and Lipid Content(g / 100g) of Foods</h1>
+        
+        <div id="controls" style="width:270px">
+        <br>
+
+        <!--label for the slider-->
+        <label id= "filterTitle" for="KcalRange">Filter result: </label>
+        <br>
+        <!--create the slider here-->
+        
+          <p>Lipid_Total g/ 100g</p>
+          <div id="range2" class="slider-range"></div>
+          <label for="LipidRange">Lipid Range: </label>
+          <input type="text" id="LipidRange" readonly style="border:0;color:#f6931f;font-weight:bold;">
+
+      </div>
+        <div id="scatter">
     </div>
-    <div id="controls" style="width:270px">
-    <br>
-
-    <!--label for the slider-->
-    <label id= "filterTitle" for="KcalRange">Filter result: </label>
-    <br>
-    <!--create the slider here-->
-    
-      <p>Lipid_Total g/ 100g</p>
-      <div id="range2" class="slider-range"></div>
-      <label for="LipidRange">Lipid Range: </label>
-      <input type="text" id="LipidRange" readonly style="border:0;color:#f6931f;font-weight:bold;">
-            <!-- <div id="filters">
-              <select class=“myselectform”>
-              <option value="all">All</option>
-              <option value="<50"><50</option>
-              <option value="50-100">50-100</option>
-              </select> 
-            </div> -->
-
-            <!-- <div id="filtersY">
-              <select class=“myselectform”>
-              <option value="tech">Protein</option> <option value="transp">Fiber</option> <option value="retail">Calcium</option> <option value="fastfood">Iron</option>  
-              </select> 
-            </div> -->
-
-        <!--create the sliders here (with labels to show the selected range)-->
+        <p>* Size of circle represents Lipid content of the food. Hover to see more detailed information.</p>
+        <br>
+        </div>
+    <div class='col-lg-5'>
+        <h1>Top 20 Food Rich of Fiber and Protein</h1>
+        <button id="buttonLipid" style="margin-left:150px">Sort by Lipid (low to high)</button>
+        <div id="bar"></div>
+        <br>
+    </div>
   </div>
-    <div id="scatter"><!-- 
-        <input type="button" name="xAxis" value="Reset Axis"/>
- -->
-    
-    </div>
-    <p>* Size of circle represents Lipid content of the food. Hover to see more detailed information.</p>
-    <br>
-    <hr/>
-
-    <h1>Top 20 Food Rich of Fiber and Protein</h1>
-    <button id="buttonLipid" style="margin-left:150px">Sort by Lipid</button>
-    <div id="bar"></div>
-    <br>
-    
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
     <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>

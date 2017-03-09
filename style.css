@@ -51,8 +51,8 @@ rect {
 }
 
 #bar {
-  margin-left: 100px;
-  margin-right: 100px;
+  margin-left: 0px;
+  margin-right: 0px;
 }
 
 h1 {
@@ -60,25 +60,32 @@ h1 {
   margin-bottom: 0px;
   padding-bottom: 25px;
   margin-top: 50px;
+  font-size: 20pt;
 }
 
-#scatter {
-  margin-left: 250px;
-  margin-right: auto;
-}
 
 p {
-  text-align: right;
+  text-align: left;
 }
 
 button {
-  margin-left: 150px;
+  margin-left: 0px;
+  margin-top: 50px;
 }
 
 #bar svg {
-  height: 600px;
+  height: 800px;
 }
 
 #bar svg .modebar .modebar--hover {
   opacity: 0;
+}
+
+.col-lg-5 {
+  float: right;
+  margin-right: 5px;
+}
+
+#scatter svg{
+  width: 800px;
 }

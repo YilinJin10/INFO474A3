@@ -23,6 +23,7 @@ d3.csv("nutrition.csv", function(data) {
     d.Protein = +d.Protein;
     d.Fiber_TD = +d.Fiber_TD;
     d.Lipid_Tot = +d.Lipid_Tot;
+    d.Energ_kcal = +d.Energ_kcal;
   });
 
   var xMax = d3.max(data, function(d) { return d[xCat]; }) * 1.05,
@@ -97,36 +98,6 @@ d3.csv("nutrition.csv", function(data) {
 
 drawVis(data);
 
-  var objects = svg.append("svg")
-      .classed("objects", true)
-      .attr("width", width)
-      .attr("height", height);
-
-  objects.append("svg:line")
-      .classed("axisLine hAxisLine", true)
-      .attr("x1", 0)
-      .attr("y1", 0)
-      .attr("x2", width)
-      .attr("y2", 0)
-      .attr("transform", "translate(0," + height + ")");
-
-  objects.append("svg:line")
-      .classed("axisLine vAxisLine", true)
-      .attr("x1", 0)
-      .attr("y1", 0)
-      .attr("x2", 0)
-      .attr("y2", height);
-
-  objects.selectAll(".dot")
-      .data(data)
-    .enter().append("circle")
-      .classed("dot", true)
-      .attr("r", function (d) { return 6 * Math.sqrt(d[rCat] / Math.PI); })
-      .attr("transform", transform)
-      .style("fill", "#4682b4")
-      .style("opacity", "0.5")
-      .on("mouseover", tip.show)
-      .on("mouseout", tip.hide);
 
 
 function drawVis(data){
@@ -161,7 +132,58 @@ function drawVis(data){
       .style("opacity", "0.5")
       .on("mouseover", tip.show)
       .on("mouseout", tip.hide);
-}
+  
+  // objects.selectAll(".dot")
+  //     .data(data)
+  //   .enter().append("circle")
+  //     .classed("dot", true)
+  //     .attr("r", function (d) { return 6 * Math.sqrt(d[rCat] / Math.PI); })
+  //     .attr("transform", transform)
+  //     .style("fill", function(d) {
+  //         var sortd = data.sort(function(a, b) {
+  //             return (b.Protein + b.Fiber_TD) - (a.Protein + a.Fiber_TD);
+  //         })
+
+  //         var sort20 = [];
+  //         for (i = 0; i < 20; i++) {
+  //           sort20[i] = sortd[i];
+  //           if (data.FoodName == sort20[i].FoodName) {
+  //             return "rgb(0, 89, 45)";
+  //           }
+  //         }
+  //         return "#4682b4";
+  //     })
+  //     .style("opacity", "0.5")
+  //     .on("mouseover", tip.show)
+  //     .on("mouseout", tip.hide);
+  
+  // var sorted = data.sort(function(a, b) {
+  //   return (b.Protein + b.Fiber_TD) - (a.Protein + a.Fiber_TD);
+  // })
+
+  // var x_domain = [];
+  // var y_domain = [];
+  // var y2_domain = [];
+  // var sort20 =[];
+
+  // for (i = 0; i < 20; i++) {
+  //   x_domain[i] = sorted[i].FoodName;
+  //   y_domain[i] = sorted[i].Protein;
+  //   y2_domain[i] = sorted[i].Fiber_TD;
+  //   sort20[i] = sorted[i];
+  // }
+
+  // objects.selectAll(".dot")
+  //     .data(sort20)
+  //   .enter().append("circle")
+  //     .classed("dot", true)
+  //     .attr("r", function (d) { return 6 * Math.sqrt(d[rCat] / Math.PI); })
+  //     .attr("transform", transform)
+  //     .style("fill", 'rgb(221, 221, 221)')
+  //     .style("opacity", "0.5")
+  //     .on("mouseover", tip.show)
+  //     .on("mouseout", tip.hide);
+} 
 
   d3.select("input").on("click", change);
 
@@ -191,25 +213,7 @@ function transform(d) {
   return "translate(" + x(d[xCat]) + "," + y(d[yCat]) + ")";
 }
 
-// slider for lipid
-// $(function() {
-//       $( "#range2" ).slider({
-//       range: true,
-//       min: 0,
-//       max: 500,
-//       values: [ 0, 500], slide: function( event, ui ) {
-//       $( "#LipidRange" ).val( ui.values[ 0 ] + " - " + ui.values[ 1 ] );
-//       filterRange(ui.values); } });
-//       $( "#LipidRange" ).val( $( "#range2" ).slider( "values", 0 ) +
-//       " - " + $( "#range2" ).slider( "values", 1 ) ); });
-
-// function filterRange(values){
-//   var toVisualize = data.filter(function(d) {
-//     return d["range2"] >= values[0] && d["range2"] < values[1]
-
-//   });
-//   drawVis(toVisualize);
-// }
+// slider filter for lipid
 
 function filter(attr, values) {
     //  set range of changed attribute to the new values from the slider
@@ -301,7 +305,6 @@ var layout = {
       fixedrange: true,
   },
   xaxis: {
-    title: 'Food Name',
     fixedrange:true,
   }
 };
