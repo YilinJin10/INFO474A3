@@ -130,6 +130,7 @@ drawVis(data);
 
 
 function drawVis(data){
+  svg.selectAll(".dot").remove();
   var objects = svg.append("svg")
       .classed("objects", true)
       .attr("width", width)
@@ -149,7 +150,7 @@ function drawVis(data){
       .attr("y1", 0)
       .attr("x2", 0)
       .attr("y2", height);
-
+  
   objects.selectAll(".dot")
       .data(data)
     .enter().append("circle")
@@ -296,7 +297,12 @@ var barChart = [trace1, trace2]
 var layout = {
   barmode: 'stack',
   yaxis: {
-    title: 'Nutrition Content'
+    title: 'Nutrition Content (g)/100g',
+      fixedrange: true,
+  },
+  xaxis: {
+    title: 'Food Name',
+    fixedrange:true,
   }
 };
 
