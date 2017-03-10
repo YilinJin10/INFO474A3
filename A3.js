@@ -357,7 +357,57 @@ $('#buttonLipid').click(function() {
 
 });
 
+  $('#reset').click(function() {
 
+
+        var sorted = data.sort(function(a, b) {
+        return (b.Protein + b.Fiber_TD) - (a.Protein + a.Fiber_TD);
+      })
+
+      var x_domain = [];
+      var y_domain = [];
+      var y2_domain = [];
+      var sort20 =[];
+
+      for (i = 0; i < 20; i++) {
+        x_domain[i] = sorted[i].FoodName;
+        y_domain[i] = sorted[i].Protein;
+        y2_domain[i] = sorted[i].Fiber_TD;
+        sort20[i] = sorted[i];
+      }
+
+      var trace1 = {
+          x: x_domain,
+          y: y_domain,
+          name: 'Protein',
+          type: "bar"
+      };
+
+      var trace2 = {
+          x: x_domain,
+          y: y2_domain,
+          name: 'Fiber',
+          type: "bar"
+      };
+
+      var barChart = [trace1, trace2]
+            marker: {color: 'rgb(0,89,45)'};
+
+      var layout = {
+        barmode: 'stack',
+        yaxis: {
+          title: 'Nutrition Content (g)/100g',
+            fixedrange: true,
+        },
+        xaxis: {
+          fixedrange:true,
+        }
+      };
+
+      // draw stacked bar graph
+        Plotly.newPlot('bar', barChart, layout, {showLink: false, displayModeBar:false});
+
+});
 
 });
 
